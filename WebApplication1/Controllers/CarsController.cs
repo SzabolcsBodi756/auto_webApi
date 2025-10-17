@@ -54,7 +54,7 @@ namespace WebApplication1.Controllers
                 }
                 else
                 {
-                    return BadRequest(new { message = "Sikertelen lekérdezés!" });
+                    return BadRequest(new { message = "Sikertelen hozzáadás!" });
                 }
             }
         }
