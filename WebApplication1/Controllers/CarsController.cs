@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.OpenApi.Validations;
 using WebApplication1.Models;
+using WebApplication1.Models.Dtos;
 
 namespace WebApplication1.Controllers
 {
@@ -74,10 +75,60 @@ namespace WebApplication1.Controllers
                 }
                 else
                 {
-                    return BadRequest(new { message = "Sikertelen hozzáadás!" });
+                    return BadRequest( new { message = "Sikertelen hozzáadás!" } );
                 }
             }
         }
 
+
+        [HttpDelete]
+        public ActionResult DeleteRecord(int id)
+        {
+
+            using (var context = new CarDbContext())
+            {
+                var car = context.Cars.FirstOrDefault(car => car.Id == id);
+
+                if (car != null)
+                {
+                    context.Cars.Remove(car);
+
+                    context.SaveChanges();
+
+                    return Ok( new { message = "Sikertelen törlés!" } );
+                }
+                else
+                {
+                    return NotFound( new { message = "Nincs mit törölni!" } );
+                }
+            }
+        }
+
+
+        [HttpPut]
+        public ActionResult PutRecord(int id, UpdateCarDto updateCarDto)
+        {
+
+            using (var context = new CarDbContext())
+            {
+                var existingCar = context.Cars.FirstOrDefault(car => car.Id == id);
+
+                if (existingCar != null)
+                {
+                    existingCar.Brand = updateCarDto.Brand;
+                    existingCar.Type = updateCarDto.Type;
+                    existingCar.Color = updateCarDto.Color;
+                    existingCar.Year = updateCarDto.Year;
+
+                    context.Cars.Update(existingCar);
+                    context.SaveChanges();
+
+                    return Ok( new { message = "Sikeres frisssítés!"} );
+                }
+
+                return NotFound( new { message = "Nincs mit frissíteni!" } );
+            }
+
+        }
     }
 }

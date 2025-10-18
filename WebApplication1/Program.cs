@@ -9,6 +9,20 @@ namespace WebApplication1
         {
             var builder = WebApplication.CreateBuilder(args);
 
+            var MyAllowSpecificOrigins = "_myAllowSpecificOrigins";
+
+            builder.Services.AddCors(options =>
+            {
+
+                options.AddPolicy(MyAllowSpecificOrigins,
+                                      policy =>
+                                      {
+                                          policy.WithOrigins("*")
+                                                                .AllowAnyHeader()
+                                                                .AllowAnyMethod();
+                                      });
+            });
+
             // Add services to the container.
 
             builder.Services.AddControllers();
@@ -29,6 +43,7 @@ namespace WebApplication1
 
             app.UseAuthorization();
 
+            app.UseCors(MyAllowSpecificOrigins);
 
             app.MapControllers();
 
