@@ -20,13 +20,33 @@ namespace WebApplication1.Controllers
 
                 if (cars != null)
                 {
-                    return Ok();
+                    return Ok( new { message = "Sikeres lekérdezés!", result = cars } );
                 }
 
             }
 
-            return BadRequest( new { message = "Sikertelen lekérdezés!" });
+            return BadRequest( new { message = "Sikertelen lekérdezés!" } );
             
+        }
+
+
+        [HttpGet("ById")]
+        public ActionResult<Car> GetRecordById(int id)
+        {
+
+            using (var context = new CarDbContext())
+            {
+                var car = context.Cars.FirstOrDefault(car => car.Id == id);
+
+                if (car != null)
+                {
+                    return Ok( new { message = "Sikeres lekérdezés!", result = car });
+                }
+
+            }
+
+            return NotFound( new { message = "Sikertelen lekérdezés!" } );
+
         }
 
 
@@ -58,5 +78,6 @@ namespace WebApplication1.Controllers
                 }
             }
         }
+
     }
 }
